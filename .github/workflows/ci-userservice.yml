@@ -3,12 +3,12 @@ name: CI - UserService
 on:
   push:
     paths:
-      - 'services/UserService/**'
+      - "services/UserService/**"
     branches:
       - main
   pull_request:
     paths:
-      - 'services/UserService/**'
+      - "services/UserService/**"
     branches:
       - main
 
@@ -25,7 +25,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.0.308'
+          dotnet-version: "9.0.308"
 
       # 3. Restore solution
       - name: Restore dependencies
@@ -37,4 +37,4 @@ jobs:
 
       # 5. Run tests
       - name: Run tests
-        run: dotnet test services/UserService/TestUser/TestUser.csproj --no-build --verbosity normal
+        run: dotnet test services/UserService/TestUser/TestUser.csproj --verbosity normal
