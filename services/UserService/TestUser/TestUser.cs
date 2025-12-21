@@ -6,7 +6,7 @@ namespace TestUser
         [Fact]
         public void Create_ShouldWork_AllDataValid()
         {
-            string firstName= "John";
+            string firstName= "john";
             string lastName = "Wick";
             string email = "john.wick@gamil.com";
             string passwordHash = "Hash";
@@ -23,7 +23,7 @@ namespace TestUser
         [Fact]
         public void Create_ShouldFail_InvalidEmail()
         {
-            string firstName = "John";
+            string firstName = "john";
             string lastName = "Wick";
             string email = "john.wick-gamil.com";
             string passwordHash = "Hash";
