@@ -1,0 +1,40 @@
+name: CI - UserService
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Setup .NET SDK
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "9.0.308"
+
+      # 3. Restore dependencies
+      - name: Restore dependencies
+        run: dotnet restore services/UserService/UserService.sln
+
+      # 4. Build the solution
+      - name: Build
+        run: dotnet build services/UserService/UserService.sln --no-restore --configuration Release
+
+      # 5. Run tests
+      - name: Run tests
+        run: dotnet test services/UserService/TestUser/TestUser.csproj --no-build --verbosity normal
