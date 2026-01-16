@@ -1,5 +1,5 @@
 ﻿using UserService.Domain.Entities;
-namespace TestUser
+namespace TestUser.Domain
 {
     public class TestUser
     {

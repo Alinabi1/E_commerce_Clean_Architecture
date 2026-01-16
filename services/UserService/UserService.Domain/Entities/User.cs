@@ -59,6 +59,10 @@
 
         public void SetRole(string role)
         {
+            if (string.IsNullOrWhiteSpace(role))
+                throw new ArgumentException("Role cannot be empty");
+            role = role.Trim();
+
             if (!Enum.TryParse<UserRole>(role, true, out var parsedRole) ||
                !Enum.IsDefined(typeof(UserRole), parsedRole))
             {
