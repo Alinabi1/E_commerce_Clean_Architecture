@@ -24,11 +24,8 @@ namespace TestUser.Fakes
             return Task.CompletedTask;
         }
 
-        public Task RemoveUserAsync(int id) {
-            var user = _users.FirstOrDefault(u => u.Id == id);
-            if (user != null) {
-                _users.Remove(user);
-            }
+        public Task RemoveUserAsync(User user) {
+            _users.Remove(user);
             return Task.CompletedTask;
         }
 

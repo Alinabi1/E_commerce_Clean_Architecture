@@ -14,6 +14,7 @@ namespace UserService.Application.Interfaces
         Task ChangeFirstNameAsync(int id, string newFirstNme);
         Task ChangeLastNameAsync(int id, string newLastNme);
         Task ChangePasswordAsync(int id, string newPassword);
+        Task ChangeEmailAsync(int id, string newEmail);
         Task<List<User>> GetAllUsersAsync();
         Task<User?> GetUserByIdAsync(int id);
         Task<User?> GetUserByEmailAsync(string email);

@@ -250,6 +250,40 @@ namespace TestUser.Application
         }
 
         [Fact]
+        public async Task ChangeEmailAsync_shouldWork_AllDataValid()
+        {
+            int userId = 1;
+            string newEmail = "jhon.wick1@gmail.com";
+            await _userService.ChangeEmailAsync(userId, newEmail);
+            var updatedUser = await _userService.GetUserByIdAsync(userId);
+            Assert.NotNull(updatedUser);
+            Assert.Equal(newEmail, updatedUser.Email);
+        }
+
+        [Fact]
+        public async Task ChangeEmail_ShouldNotWork_SameEmail()
+        {
+            int userId = 1;
+            string newEmail = "jhon.wick@gmail.com";
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            {
+                await _userService.ChangeEmailAsync(userId, newEmail);
+            });
+        }
+
+        [Fact]
+        public async Task ChangeEmail_ShouldNotWork_NotExistingUser()
+        {
+            int userId = 999;
+            string newEmail = "jhon.wick1@gmail.com";
+            await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
+            {
+                await _userService.ChangeEmailAsync(userId, newEmail);
+            });
+
+        }
+
+        [Fact]
         public async Task GetAllUsers_ShouldWork_ReturnAllUsers()
         {
             List<User> users = await _userService.GetAllUsersAsync();

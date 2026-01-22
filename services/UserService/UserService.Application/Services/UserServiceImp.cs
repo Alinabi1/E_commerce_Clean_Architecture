@@ -30,7 +30,7 @@ namespace UserService.Application.Services
             {
                 throw new KeyNotFoundException("User not found.");
             }
-            await _userRepository.RemoveUserAsync(id);
+            await _userRepository.RemoveUserAsync(user);
         }
 
         public async Task ChangeFirstNameAsync(int id, string newFirstName)
@@ -75,6 +75,26 @@ namespace UserService.Application.Services
                 throw new InvalidOperationException("The new password is the same as the current one.");
             }
             user.SetPasswordHash(newPassword);
+            await _userRepository.UpdateUserAsync(user);
+        }
+
+        public async Task ChangeEmailAsync(int id, string newEmail)
+        {
+            var user = await _userRepository.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                throw new KeyNotFoundException("User not found.");
+            }
+            if (string.Equals(user.Email, newEmail, StringComparison.Ordinal))
+            {
+                throw new InvalidOperationException("The new email is the same as the current one.");
+            }
+            var existingUser = await _userRepository.GetUserByEmailAsync(newEmail);
+            if (existingUser != null)
+            {
+                throw new InvalidOperationException("A user with this email already exists.");
+            }
+            user.SetEmail(newEmail);
             await _userRepository.UpdateUserAsync(user);
         }
 

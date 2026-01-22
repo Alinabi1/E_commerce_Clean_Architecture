@@ -10,7 +10,7 @@ namespace UserService.Application.Interfaces
     public interface IUserRepository
     {
         Task AddUserAsync(User user);
-        Task RemoveUserAsync(int id);
+        Task RemoveUserAsync(User user);
         Task UpdateUserAsync(User user);
         Task<List<User>> GetAllUsersAsync();
         Task<User?> GetUserByIdAsync(int id);
