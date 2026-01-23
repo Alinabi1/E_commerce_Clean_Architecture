@@ -19,7 +19,7 @@ namespace IntegrationsTests
 
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 26)),
-                    mySqlOptions => mySqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null))
+                    mySqlOptions => mySqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(2), null))
                 .Options;
 
             var dbContext = new AppDbContext(options);
