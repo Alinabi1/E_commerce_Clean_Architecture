@@ -15,7 +15,7 @@ namespace IntegrationsTests
             var databaseName = $"user_service_test_{Guid.NewGuid():N}";
 
             var connectionString =
-                $"Server=localhost;Database={databaseName};User=user1;Password=user_service_db1;";
+                $"Server=localhost;Database={databaseName};User=root;Password=root;";
 
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseMySql(connectionString,
