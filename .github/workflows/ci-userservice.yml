@@ -51,3 +51,6 @@ jobs:
       # 5. Run tests
       - name: Run tests
         run: dotnet test services/UserService/TestUser/TestUser.csproj --verbosity normal
+
+      - name: Run integration tests
+        run: dotnet test services/UserService/IntegrationTests/IntegrationTests.csproj --verbosity normal
