@@ -24,7 +24,7 @@ namespace IntegrationsTests
 
             var dbContext = new AppDbContext(options);
             dbContext.Database.EnsureCreated();
-            Console.WriteLine($"Creating DB for test: {databaseName}");
+            Console.WriteLine($"Creating DB for test : {databaseName}");
 
             return dbContext;
         }
