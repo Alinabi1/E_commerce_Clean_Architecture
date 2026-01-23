@@ -6,7 +6,7 @@ using UserService.Domain.Entities;
 
 namespace IntegrationsTests
 {
-    public class UserServiceIntgrationTests : IntegrationTestBase
+    public class UserServiceIntegrationTests : IntegrationTestBase
     {
         [Fact]
         public async Task AddUser_ShouldPersistInDatabase()

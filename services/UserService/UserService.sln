@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService.Infrastructure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUser", "TestUser\TestUser.csproj", "{72F01E05-EC70-4266-9B9F-9E9510686CFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationsTests", "IntegrationsTests\IntegrationsTests.csproj", "{9BA24E52-DA10-4D0A-B6A8-04F5EC87C0B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "IntegrationsTests\IntegrationTests.csproj", "{9BA24E52-DA10-4D0A-B6A8-04F5EC87C0B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
