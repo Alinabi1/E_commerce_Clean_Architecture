@@ -23,7 +23,6 @@ namespace UserService.Infrastructure.Data
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
         }
-
         public async Task RemoveUserAsync(User user)
         {
             _context.Users.Remove(user);
