@@ -9,12 +9,9 @@ namespace UserService.Application.Interfaces
 {
     public interface IUserService
     {
-        Task AddUserAsync(string firstName, string lastName, string email, string passwordHash, string role);
+        Task AddUserAsync(User user);
         Task RemoveUserAsync(int id);
-        Task ChangeFirstNameAsync(int id, string newFirstNme);
-        Task ChangeLastNameAsync(int id, string newLastNme);
-        Task ChangePasswordAsync(int id, string newPassword);
-        Task ChangeEmailAsync(int id, string newEmail);
+        Task UpdateUserAsync(int id, User user);
         Task<List<User>> GetAllUsersAsync();
         Task<User?> GetUserByIdAsync(int id);
         Task<User?> GetUserByEmailAsync(string email);

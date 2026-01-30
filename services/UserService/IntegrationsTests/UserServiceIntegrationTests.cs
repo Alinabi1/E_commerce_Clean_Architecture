@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
-using UserService.Infrastructure.Data;
-using UserService.Application.Services;
+﻿using System.Data;
+using System.Threading.Tasks;
 using UserService.Application.Interfaces;
+using UserService.Application.Services;
 using UserService.Domain.Entities;
+using UserService.Infrastructure.Data;
 
 namespace IntegrationsTests
 {
@@ -16,13 +17,14 @@ namespace IntegrationsTests
             var _service = new UserServiceImp(_repo);
 
             string email = "jhon.wick@gmail.com";
+            User user = new User("Jhon", "Wick", email, "jhonwick123", "Admin");
 
-            await _service.AddUserAsync("Jhon", "Wick", email, "jhonwick123", "Admin");
+            await _service.AddUserAsync(user);
 
-            var user = await _service.GetUserByEmailAsync(email);
-            Assert.NotNull(user);
+            var createdUser = await _service.GetUserByEmailAsync(email);
+            Assert.NotNull(createdUser);
 
-
+            CleanupDatabase(_context);
 
         }
 
@@ -39,14 +41,16 @@ namespace IntegrationsTests
             string pass = "jhonwick123";
             string role = "Admin";
 
-            await _service.AddUserAsync(firstName,lastName,email,pass,role);
+            User user = new User(firstName, lastName, email, pass, role);
 
-            var user = await _service.GetUserByEmailAsync("jhon.wick@gmail.com");
-            Assert.NotNull(user);
-            Assert.Equal(firstName, user.FirstName);
-            Assert.Equal(lastName, user.LastName);
-            Assert.Equal(email, user.Email);
-            Assert.Equal(role, user.Role.ToString());
+            await _service.AddUserAsync(user);
+
+            var CreatedUser = await _service.GetUserByEmailAsync("jhon.wick@gmail.com");
+            Assert.NotNull(CreatedUser);
+            Assert.Equal(firstName, CreatedUser.FirstName);
+            Assert.Equal(lastName, CreatedUser.LastName);
+            Assert.Equal(email, CreatedUser.Email);
+            Assert.Equal(role, CreatedUser.Role.ToString());
 
             CleanupDatabase(_context);
         }
@@ -59,21 +63,21 @@ namespace IntegrationsTests
             var _service = new UserServiceImp(_repo);
 
             string email = "jhon.wick@gmail.com";
+            User user = new User("Jhon", "Wick", email, "jhonwick123", "Admin");
 
-            await _service.AddUserAsync("Jhon", "Wick", email, "jhonwick123", "Admin");
+            await _service.AddUserAsync(user);
 
             string newFirstName = "Jonathan";
             string newLastName = "Wickerson";
             string newEmail = "jonathan.wickerson@gmail.com";
             string newPassword = "newpassword123";
 
-            var user = await _service.GetUserByEmailAsync(email);
-            Assert.NotNull(user);
+            User userForUpdate = new User(newFirstName, newLastName, newEmail, newPassword);
 
-            await _service.ChangeFirstNameAsync(user.Id, newFirstName);
-            await _service.ChangeLastNameAsync(user.Id, newLastName);
-            await _service.ChangePasswordAsync(user.Id, newPassword);
-            await _service.ChangeEmailAsync(user.Id, newEmail);
+            var createdUser = await _service.GetUserByEmailAsync(email);
+            Assert.NotNull(createdUser);
+
+            await _service.UpdateUserAsync(createdUser.Id, userForUpdate);
 
             var updatedUser = await _service.GetUserByEmailAsync(newEmail);
 
@@ -96,14 +100,16 @@ namespace IntegrationsTests
 
             string email = "jhon.wick@gamil.com";
 
-            await _service.AddUserAsync("Jhon", "Wick", email, "jhonwick123", "Admin");
+            User user = new User("Jhon", "Wick", email, "jhonwick123", "Admin");
 
-            var user = await _service.GetUserByEmailAsync(email);
-            Assert.NotNull(user);
+            await _service.AddUserAsync(user);
 
-            await _service.RemoveUserAsync(user.Id);
+            var CreatedUser = await _service.GetUserByEmailAsync(email);
+            Assert.NotNull(CreatedUser);
 
-            User? deletedUser = await _service.GetUserByIdAsync(user.Id);
+            await _service.RemoveUserAsync(CreatedUser.Id);
+
+            User? deletedUser = await _service.GetUserByIdAsync(CreatedUser.Id);
             Assert.Null(deletedUser);
 
             CleanupDatabase(_context);
@@ -117,10 +123,14 @@ namespace IntegrationsTests
             var _service = new UserServiceImp(_repo);
 
             string firstName = "Jhon";
+            User user1 = new User(firstName, "Wick", "jhon.wick@gamil.com", "jhonwick123", "Admin");
+            User user2 = new User(firstName, "Wickerson", "jhon.wickerson@gamil.com", "jhonwickerson123", "Admin");
+            User user3 = new User("Bat", "Man", "bat.man@gmail.com", "batman123", "Owner");
 
-            await _service.AddUserAsync(firstName, "Wick", "jhon.wick@gamil.com", "jhonwick123", "Admin");
-            await _service.AddUserAsync(firstName, "Wickerson", "jhon.wickerson@gamil.com", "jhonwickerson123", "Admin");
-            await _service.AddUserAsync("Bat", "Man", "bat.man@gmail.com", "batman123", "Owner");
+
+            await _service.AddUserAsync(user1);
+            await _service.AddUserAsync(user2);
+            await _service.AddUserAsync(user3);
 
             var list = await _service.GetUserByFirstNameAsync(firstName);
             Assert.NotNull(list);
@@ -138,9 +148,13 @@ namespace IntegrationsTests
 
             string lastName = "Wick";
 
-            await _service.AddUserAsync("Jhon", lastName, "jhon.wick@gamil.com", "jhonwick123", "Admin");
-            await _service.AddUserAsync("Jonathan", lastName, "jonathan.wick@gamil.com", "jonathanwick123", "Admin");
-            await _service.AddUserAsync("Bat", "Man", "bat.man@gmail.com", "batman123", "Owner");
+            User user1 = new User("Jhon", lastName, "jhon.wick@gamil.com", "jhonwick123", "Admin");
+            User user2 = new User("Jonathan", lastName, "jonathan.wick@gamil.com", "jonathanwick123", "Admin");
+            User user3 = new User("Bat", "Man", "bat.man@gmail.com", "batman123", "Owner");
+
+            await _service.AddUserAsync(user1);
+            await _service.AddUserAsync(user2);
+            await _service.AddUserAsync(user3);
 
             var list = await _service.GetUserByLastNameAsync(lastName);
             Assert.NotNull(list);
@@ -159,9 +173,13 @@ namespace IntegrationsTests
 
             string role = "Admin";
 
-            await _service.AddUserAsync("Jhon", "Wick", "jhon.wick@gamil.com", "jhonwick123", role);
-            await _service.AddUserAsync("Jonathan", "Wickerson", "jonathan.wickerson@gamil.com", "jhonwickerson123", role);
-            await _service.AddUserAsync("Bat", "Man", "bat.man@gmail.com", "batman123", "Owner");
+            User user1 = new User("Jhon", "Wick", "jhon.wick@gamil.com", "jhonwick123", role);
+            User user2 = new User("Jonathan", "Wickerson", "jonathan.wickerson@gamil.com", "jhonwickerson123", role);
+            User user3 = new User("Bat", "Man", "bat.man@gmail.com", "batman123", "Owner");
+
+            await _service.AddUserAsync(user1);
+            await _service.AddUserAsync(user2);
+            await _service.AddUserAsync(user3);
 
             var users = await _service.GetUserByRoleAsync(role);
             Assert.NotNull(users);
@@ -178,9 +196,13 @@ namespace IntegrationsTests
             var _repo = new UserRepository(_context);
             var _service = new UserServiceImp(_repo);
 
-            await _service.AddUserAsync("Jhon", "Wick", "jhon.wick@gamil.com", "jhonwick123", "Admin");
-            await _service.AddUserAsync("Jonathan", "Wickerson", "jonathan.wickerson@gamil.com", "jhonwickerson123", "Admin");
-            await _service.AddUserAsync("Bat", "Man", "bat.man@gmail.com", "batman123", "Owner");
+            User user1 = new User("Jhon", "Wick", "jhon.wick@gamil.com", "jhonwick123", "Admin");
+            User user2 = new User("Jonathan", "Wickerson", "jonathan.wickerson@gamil.com", "jhonwickerson123", "Admin");
+            User user3 = new User("Bat", "Man", "bat.man@gmail.com", "batman123", "Owner");
+
+            await _service.AddUserAsync(user1);
+            await _service.AddUserAsync(user2);
+            await _service.AddUserAsync(user3);
 
             var users = await _service.GetAllUsersAsync();
             Assert.NotNull(users);

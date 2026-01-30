@@ -21,6 +21,14 @@
             SetRole(role);
         }
 
+        public User(string firstName, string lastName, string email, string passwordHash)
+        {
+            SetFirstName(firstName);
+            SetLastName(lastName);
+            SetEmail(email);
+            SetPasswordHash(passwordHash);
+        }
+
         public void SetFirstName(string firstName)
         {
             if (string.IsNullOrWhiteSpace(firstName))

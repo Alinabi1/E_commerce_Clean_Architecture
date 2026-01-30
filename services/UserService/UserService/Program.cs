@@ -11,6 +11,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
     ));
 
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddControllers();
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserServiceImp>();
 

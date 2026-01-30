@@ -12,15 +12,15 @@ namespace UserService.Application.Services
             _userRepository = userRepository;
         }
 
-        public async Task AddUserAsync(string firstName, string lastName, string email, string passwordHash, string role)
+        public async Task AddUserAsync(User user)
         {
-            var existingUser = await _userRepository.GetUserByEmailAsync(email);
+            var existingUser = await _userRepository.GetUserByEmailAsync(user.Email);
             if (existingUser != null)
             {
                 throw new InvalidOperationException("A user with this email already exists.");
             }
 
-            await _userRepository.AddUserAsync(new User(firstName, lastName, email, passwordHash, role));
+            await _userRepository.AddUserAsync(user);
         }
 
         public async Task RemoveUserAsync(int id)
@@ -33,101 +33,117 @@ namespace UserService.Application.Services
             await _userRepository.RemoveUserAsync(user);
         }
 
-        public async Task ChangeFirstNameAsync(int id, string newFirstName)
+        public async Task UpdateUserAsync(int id, User user)
         {
-            var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null)
             {
-                throw new KeyNotFoundException("User not found.");
+                throw new ArgumentNullException("No value to change to.");
             }
-            if (string.Equals(user.FirstName, newFirstName, StringComparison.Ordinal))
-            {
-                throw new InvalidOperationException("The new first name is the same as the current one.");
-            }
-            user.SetFirstName(newFirstName);
-            await _userRepository.UpdateUserAsync(user);
-        }
 
-        public async Task ChangeLastNameAsync(int id, string newLastName)
-        {
-            var user = await _userRepository.GetUserByIdAsync(id);
-            if (user == null)
+            var userFromDb = await _userRepository.GetUserByIdAsync(id);
+            if (userFromDb == null)
             {
                 throw new KeyNotFoundException("User not found.");
             }
-            if (string.Equals(user.LastName, newLastName, StringComparison.Ordinal))
+            if (!string.IsNullOrEmpty(user.FirstName))
             {
-                throw new InvalidOperationException("The new last name is the same as the current one.");
+                if (string.Equals(userFromDb.FirstName, user.FirstName, StringComparison.Ordinal))
+                {
+                    throw new InvalidOperationException("The new first name is the same as the current one.");
+                }
+                userFromDb.SetFirstName(user.FirstName);
             }
-            user.SetLastName(newLastName);
-            await _userRepository.UpdateUserAsync(user);
-        }
-
-        public async Task ChangePasswordAsync(int id, string newPassword)
-        {
-            var user = await _userRepository.GetUserByIdAsync(id);
-            if (user == null)
+            if (!string.IsNullOrEmpty(user.LastName))
             {
-                throw new KeyNotFoundException("User not found.");
+                if (string.Equals(userFromDb.LastName, user.LastName, StringComparison.Ordinal))
+                {
+                    throw new InvalidOperationException("The new last name is the same as the current one.");
+                }
+                userFromDb.SetLastName(user.LastName);
             }
-            if (string.Equals(user.PasswordHash, newPassword, StringComparison.Ordinal))
+            if (!string.IsNullOrEmpty(user.Email))
             {
-                throw new InvalidOperationException("The new password is the same as the current one.");
+                if (string.Equals(userFromDb.Email, user.Email, StringComparison.Ordinal))
+                {
+                    throw new InvalidOperationException("The new email is the same as the current one.");
+                }
+                var existingUser = await _userRepository.GetUserByEmailAsync(user.Email);
+                if (existingUser != null)
+                {
+                    throw new InvalidOperationException("A user with this email already exists.");
+                }
+                userFromDb.SetEmail(user.Email);
             }
-            user.SetPasswordHash(newPassword);
-            await _userRepository.UpdateUserAsync(user);
-        }
-
-        public async Task ChangeEmailAsync(int id, string newEmail)
-        {
-            var user = await _userRepository.GetUserByIdAsync(id);
-            if (user == null)
+            if (!string.IsNullOrEmpty(user.PasswordHash))
             {
-                throw new KeyNotFoundException("User not found.");
+                if (string.Equals(userFromDb.PasswordHash, user.PasswordHash, StringComparison.Ordinal))
+                {
+                    throw new InvalidOperationException("The new password is the same as the current one.");
+                }
+                userFromDb.SetPasswordHash(user.PasswordHash);
             }
-            if (string.Equals(user.Email, newEmail, StringComparison.Ordinal))
-            {
-                throw new InvalidOperationException("The new email is the same as the current one.");
-            }
-            var existingUser = await _userRepository.GetUserByEmailAsync(newEmail);
-            if (existingUser != null)
-            {
-                throw new InvalidOperationException("A user with this email already exists.");
-            }
-            user.SetEmail(newEmail);
-            await _userRepository.UpdateUserAsync(user);
+            await _userRepository.UpdateUserAsync(userFromDb);
         }
 
         public async Task<List<User>> GetAllUsersAsync()
         {
-            return await _userRepository.GetAllUsersAsync();
+            List<User> users = await _userRepository.GetAllUsersAsync();
+            if (users == null || users.Count == 0)
+            {
+                throw new KeyNotFoundException("No users found.");
+            }
+            return users;
         }
 
         public async Task<User?> GetUserByIdAsync(int id)
         {
+            User? user = await _userRepository.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                throw new KeyNotFoundException("User not found.");
+            }
             return await _userRepository.GetUserByIdAsync(id);
 
         }
 
         public async Task<User?> GetUserByEmailAsync(string email)
         {
+            User user = await _userRepository.GetUserByEmailAsync(email);
+            if (user == null)
+            {
+                throw new KeyNotFoundException("User not found.");
+            }
             return await _userRepository.GetUserByEmailAsync(email);
         }
 
         public async Task<List<User>> GetUserByFirstNameAsync(string firstName)
         {
-            return await _userRepository.GetUserByFirstNameAsync(firstName);
+            List<User> users = await _userRepository.GetUserByFirstNameAsync(firstName);
+            if (users == null)
+            {
+                throw new KeyNotFoundException("User not found.");
+            }
+            return users;
         }
 
         public async Task<List<User>> GetUserByLastNameAsync(string lastName)
         {
-            return await _userRepository.GetUserByLastNameAsync(lastName);
+            List<User> users = await _userRepository.GetUserByLastNameAsync(lastName);
+            if (users == null)
+            {
+                throw new KeyNotFoundException("User not found.");
+            }
+            return users;
         }
 
         public async Task<List<User>> GetUserByRoleAsync(string role)
         {
-            return await _userRepository.GetUserByRoleAsync(role);
-
+            List<User> users = await _userRepository.GetUserByRoleAsync(role);
+            if (users == null)
+            {
+                throw new KeyNotFoundException("User not found.");
+            }
+            return users;
         }
     }
 }
