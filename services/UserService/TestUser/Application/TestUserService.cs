@@ -53,7 +53,7 @@ namespace TestUser.Application
 
             await Assert.ThrowsAsync<ArgumentException>(async () =>
             {
-                await _userService.AddUserAsync(firstName, lastName, email, passwordHash, role);
+                await _userService.AddUserAsync(new User (firstName, lastName, email, passwordHash, role));
             });
         }
 
@@ -68,7 +68,7 @@ namespace TestUser.Application
 
             await Assert.ThrowsAsync<ArgumentException>(async () =>
             {
-                await _userService.AddUserAsync(firstName, lastName, email, passwordHash, role);
+                await _userService.AddUserAsync(new User (firstName, lastName, email, passwordHash, role));
             });
         }
 
@@ -83,7 +83,7 @@ namespace TestUser.Application
 
             await Assert.ThrowsAsync<ArgumentException>(async () =>
             {
-                await _userService.AddUserAsync(firstName, lastName, email, passwordHash, role);
+                await _userService.AddUserAsync(new User(firstName, lastName, email, passwordHash, role));
             });
         }
 
@@ -98,7 +98,7 @@ namespace TestUser.Application
 
             await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
-                await _userService.AddUserAsync(firstName, lastName, email, passwordHash, role);
+                await _userService.AddUserAsync(new User(firstName, lastName, email, passwordHash, role));
             });
         }
 
@@ -113,7 +113,7 @@ namespace TestUser.Application
 
             await Assert.ThrowsAsync<ArgumentException>(async () =>
             {
-                await _userService.AddUserAsync(firstName, lastName, email, passwordHash, role);
+                await _userService.AddUserAsync(new User(firstName, lastName, email, passwordHash, role));
             });
         }
 
@@ -128,7 +128,7 @@ namespace TestUser.Application
 
             await Assert.ThrowsAsync<ArgumentException>(async () =>
             {
-                await _userService.AddUserAsync(firstName, lastName, email, passwordHash, role);
+                await _userService.AddUserAsync(new User(firstName, lastName, email, passwordHash, role));
             });
         }
 
@@ -157,7 +157,9 @@ namespace TestUser.Application
         {
             string newFirstName = "Jonathan";
             int userId = 1;
-            await _userService.ChangeFirstNameAsync(userId, newFirstName);
+            User user = new User();
+            user.SetFirstName(newFirstName);
+            await _userService.UpdateUserAsync(userId, user);
             User updatedUser = await _userService.GetUserByIdAsync(userId);
             Assert.Equal(newFirstName, updatedUser.FirstName);
         }
@@ -167,9 +169,11 @@ namespace TestUser.Application
         {
             string newFirstName = "Jhon";
             int userId = 1;
+            User user = new User();
+            user.SetFirstName(newFirstName);
             await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
-                await _userService.ChangeFirstNameAsync(userId, newFirstName);
+                await _userService.UpdateUserAsync(userId, user);
             });
         }
 
@@ -178,9 +182,11 @@ namespace TestUser.Application
         {
             string newFirstName = "Jonathan";
             int userId = 999;
+            User user = new User();
+            user.SetFirstName(newFirstName);
             await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
             {
-                await _userService.ChangeFirstNameAsync(userId, newFirstName);
+                await _userService.UpdateUserAsync(userId, user);
             });
 
         }
@@ -190,7 +196,9 @@ namespace TestUser.Application
         {
             string newLastName = "Doe";
             int userId = 2;
-            await _userService.ChangeLastNameAsync(userId, newLastName);
+            User user = new User();
+            user.SetLastName(newLastName);
+            await _userService.UpdateUserAsync(userId, user);
             User updatedUser = await _userService.GetUserByIdAsync(userId);
             Assert.Equal(newLastName, updatedUser.LastName);
         }
@@ -200,9 +208,11 @@ namespace TestUser.Application
         {
             string newLastName = "Man";
             int userId = 2;
+            User user = new User();
+            user.SetLastName(newLastName);
             await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
-                await _userService.ChangeLastNameAsync(userId, newLastName);
+                await _userService.UpdateUserAsync(userId, user);
             }); 
         }
 
@@ -211,9 +221,11 @@ namespace TestUser.Application
         {
             string newLastName = "Doe";
             int userId = 999;
+            User user = new User();
+            user.SetLastName(newLastName);
             await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
             {
-                await _userService.ChangeLastNameAsync(userId, newLastName);
+                await _userService.UpdateUserAsync(userId, user);
             });
         }
 
@@ -222,7 +234,9 @@ namespace TestUser.Application
         { 
             int userId = 3;
             string newPasswordHash = "newpassword123";
-            await _userService.ChangePasswordAsync(userId, newPasswordHash);
+            User user = new User();
+            user.SetPasswordHash(newPasswordHash);
+            await _userService.UpdateUserAsync(userId, user);
             User updatedUser = await _userService.GetUserByIdAsync(userId);
             Assert.Equal(newPasswordHash, updatedUser.PasswordHash);
         }
@@ -232,9 +246,11 @@ namespace TestUser.Application
         {
             int userId = 3;
             string newPasswordHash = "batman123";
+            User user = new User();
+            user.SetPasswordHash(newPasswordHash);
             await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
-                await _userService.ChangePasswordAsync(userId, newPasswordHash);
+                await _userService.UpdateUserAsync(userId, user);
             });
         }
 
@@ -243,9 +259,11 @@ namespace TestUser.Application
         {
             int userId = 999;
             string newPasswordHash = "newpassword123";
+            User user = new User();
+            user.SetPasswordHash(newPasswordHash);
             await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
             {
-                await _userService.ChangePasswordAsync(userId, newPasswordHash);
+                await _userService.UpdateUserAsync(userId, user);
             });
         }
 
@@ -254,7 +272,9 @@ namespace TestUser.Application
         {
             int userId = 1;
             string newEmail = "jhon.wick1@gmail.com";
-            await _userService.ChangeEmailAsync(userId, newEmail);
+            User user = new User();
+            user.SetEmail(newEmail);
+            await _userService.UpdateUserAsync(userId, user);
             var updatedUser = await _userService.GetUserByIdAsync(userId);
             Assert.NotNull(updatedUser);
             Assert.Equal(newEmail, updatedUser.Email);
@@ -265,9 +285,11 @@ namespace TestUser.Application
         {
             int userId = 1;
             string newEmail = "jhon.wick@gmail.com";
+            User user = new User();
+            user.SetEmail(newEmail);
             await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
-                await _userService.ChangeEmailAsync(userId, newEmail);
+                await _userService.UpdateUserAsync(userId, user);
             });
         }
 
@@ -276,9 +298,11 @@ namespace TestUser.Application
         {
             int userId = 999;
             string newEmail = "jhon.wick1@gmail.com";
+            User user = new User();
+            user.SetEmail(newEmail);
             await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
             {
-                await _userService.ChangeEmailAsync(userId, newEmail);
+                await _userService.UpdateUserAsync(userId, user);
             });
 
         }
