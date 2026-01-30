@@ -29,8 +29,9 @@ namespace TestUser.Application
             string email = "alice.smith@gmail.com";
             string passwordHash = "alicesmith123";
             string role = "Customer";
+            User user = new User(firstName, lastName, email, passwordHash, role);
 
-            await _userService.AddUserAsync(firstName, lastName, email, passwordHash, role);
+            await _userService.AddUserAsync(user);
 
             User addedUser = await _userService.GetUserByEmailAsync(email);
 
