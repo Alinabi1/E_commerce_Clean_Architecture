@@ -97,11 +97,6 @@ namespace UserService.Application.Services
 
         public async Task<User?> GetUserByIdAsync(int id)
         {
-            User? user = await _userRepository.GetUserByIdAsync(id);
-            if (user == null)
-            {
-                throw new KeyNotFoundException("User not found.");
-            }
             return await _userRepository.GetUserByIdAsync(id);
 
         }
