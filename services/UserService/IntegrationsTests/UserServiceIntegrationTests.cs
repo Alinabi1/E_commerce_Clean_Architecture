@@ -22,7 +22,7 @@ namespace IntegrationsTests
             var user = await _service.GetUserByEmailAsync(email);
             Assert.NotNull(user);
 
-            CleanupDatabase(_context);
+
 
         }
 

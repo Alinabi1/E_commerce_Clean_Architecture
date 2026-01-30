@@ -12,11 +12,10 @@ namespace IntegrationsTests
     {
         protected AppDbContext CreateDbContext()
         {
-            Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var databaseName = $"user_service_test_{Guid.NewGuid():N}";
 
             var connectionString =
-                $"Server=mysql;Database={databaseName};User=root;Password=root;SslMode=None;";
+                $"Server=localhost;Database={databaseName};Port=3307;User=root;Password=root;";
 
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseMySql(connectionString,
@@ -25,7 +24,6 @@ namespace IntegrationsTests
 
             var dbContext = new AppDbContext(options);
             dbContext.Database.EnsureCreated();
-            Console.WriteLine($"Creating DB for test  : {databaseName}");
 
             return dbContext;
         }
