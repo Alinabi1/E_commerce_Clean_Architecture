@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using UserService.Application.Interfaces;
 using UserService.Infrastructure.Data;
 using UserService.Application.Services;
+using UserService.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,12 +33,7 @@ app.UseHttpsRedirection();
 
 app.MapPost("/users", async (string firstName, string lastName, string email, string passwordHash, string role, IUserService service) =>
 {
-    await service.AddUserAsync(
-        firstName,
-        lastName,
-        email,
-        passwordHash,
-        role
+    await service.AddUserAsync(new User(firstName, lastName, email, passwordHash, role)
     );
     return Results.Ok();
 });
