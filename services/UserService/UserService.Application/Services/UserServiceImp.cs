@@ -87,12 +87,7 @@ namespace UserService.Application.Services
 
         public async Task<List<User>> GetAllUsersAsync()
         {
-            List<User> users = await _userRepository.GetAllUsersAsync();
-            if (users == null || users.Count == 0)
-            {
-                throw new KeyNotFoundException("No users found.");
-            }
-            return users;
+            return await _userRepository.GetAllUsersAsync();
         }
 
         public async Task<User?> GetUserByIdAsync(int id)
@@ -103,42 +98,22 @@ namespace UserService.Application.Services
 
         public async Task<User?> GetUserByEmailAsync(string email)
         {
-            User user = await _userRepository.GetUserByEmailAsync(email);
-            if (user == null)
-            {
-                throw new KeyNotFoundException("User not found.");
-            }
             return await _userRepository.GetUserByEmailAsync(email);
         }
 
         public async Task<List<User>> GetUserByFirstNameAsync(string firstName)
         {
-            List<User> users = await _userRepository.GetUserByFirstNameAsync(firstName);
-            if (users == null)
-            {
-                throw new KeyNotFoundException("User not found.");
-            }
-            return users;
+            return await _userRepository.GetUserByFirstNameAsync(firstName);
         }
 
         public async Task<List<User>> GetUserByLastNameAsync(string lastName)
         {
-            List<User> users = await _userRepository.GetUserByLastNameAsync(lastName);
-            if (users == null)
-            {
-                throw new KeyNotFoundException("User not found.");
-            }
-            return users;
+            return await _userRepository.GetUserByLastNameAsync(lastName);
         }
 
         public async Task<List<User>> GetUserByRoleAsync(string role)
         {
-            List<User> users = await _userRepository.GetUserByRoleAsync(role);
-            if (users == null)
-            {
-                throw new KeyNotFoundException("User not found.");
-            }
-            return users;
+           return await _userRepository.GetUserByRoleAsync(role);
         }
     }
 }
